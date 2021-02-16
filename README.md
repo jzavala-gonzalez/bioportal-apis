@@ -5,9 +5,9 @@
 ![GitHub contributors](https://img.shields.io/github/contributors/scottydocs/README-template.md)
 ![GitHub stars](https://img.shields.io/github/stars/scottydocs/README-template.md?style=social)
 ![GitHub forks](https://img.shields.io/github/forks/scottydocs/README-template.md?style=social)
-![Twitter Follow](https://img.shields.io/twitter/follow/SMICRCPR?style=social)
+[![Twitter](https://img.shields.io/twitter/follow/SMICRCPR.svg?style=social&label=@SMICRCPR)](https://twitter.com/SMICRCPR)
 
-BioPortal APIs es un paquete de Python que permite a cualquier persona accesar las bases de datos públicas del BioPortal del Departamento de Salud de Puerto Rico.
+BioPortal APIs es un paquete de Python que permite accesar las bases de datos públicas del BioPortal del Departamento de Salud de Puerto Rico.
 
 Este paquete le permite a uno descargar y guardar datos públicos del BioPortal a cualquier momento. Presenta un formato sencillo para facilitar su uso a cualquiera que lo desee.
 
@@ -33,17 +33,16 @@ Siga estos pasos en un programa de Python para descargar datos de APIs públicos
 ```python
 from bioportal import BioPortalClient
 
-client = BioPortalClient() # Cliente del BioPortal
+cliente = BioPortalClient()
 
-# Descargar y guardar datos en formato csv
-casos_por_coleccion = client.descargar_dataset('Casos por fecha de coleccion')
+casos_por_coleccion = cliente.descargar_dataset('Casos por fecha de coleccion')
 casos_por_coleccion.to_csv('Casos_por_fecha_coleccion.csv')
 ```
-
+El resultado será un archivo conteniendo una tabla en formato csv.
 Además, puede ver cuales APIs estan disponibles usando:
 
 ```python
->>> client.datasets_disponibles()
+cliente.datasets_disponibles()
 ```
 ```
 Bases de datos disponibles:
@@ -66,13 +65,13 @@ Bases de datos disponibles:
 <!--- If your README is long or you have some specific process or steps you want contributors to follow, consider creating a separate CONTRIBUTING.md file--->
 Para contribuir al crecimiento de BioPortal APIs, sigue estos pasos:
 
-1. Fork this repository.
-2. Create a branch: `git checkout -b <branch_name>`.
-3. Make your changes and commit them: `git commit -m '<commit_message>'`
-4. Push to the original branch: `git push origin <project_name>/<location>`
-5. Create the pull request.
+1. Bifurca este repositorio.
+2. Crea una rama: `git checkout -b <nombre_rama>`.
+3. Haga sus cambios y guardelos usando un commit: `git commit -m '<commit_message>'`
+4. Empujalos a la rama original: `git push origin bioportal-apis/<localizacion>`
+5. Crea un pull request.
 
-Alternatively see the GitHub documentation on [creating a pull request](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request).
+Alternativamente, puede rebuscar la documentación de GitHub para [crear un pull request](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request).
 
 ## Contribuyentes
 
