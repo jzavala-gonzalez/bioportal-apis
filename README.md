@@ -13,38 +13,58 @@ Este paquete le permite a uno descargar y guardar datos públicos del BioPortal 
 
 ## Prerequisitos
 
-Before you begin, ensure you have met the following requirements:
+Antes de comenzar, asegúrese de haber cumplido los siguientes requisitos:
 <!--- These are just example requirements. Add, duplicate or remove as required --->
-* You have installed the latest version of `<coding_language/dependency/requirement_1>`
-* You have a `<Windows/Linux/Mac>` machine. State which OS is supported/which is not.
-* You have read `<guide/link/documentation_related_to_project>`.
+* Tienes instalado una versión de Python >= 3.6
+* Estas utilizando una computadora con Windows, Mac, o Linux.
 
-## Installing <project_name>
+## Instalando BioPortal APIs
 
-To install <project_name>, follow these steps:
+Para instalar BioPortal APIs, abre una ventana del Command Line o Terminal y corra:
 
-Linux and macOS:
-```
-<install_command>
+```bash
+pip install bioportal
 ```
 
-Windows:
-```
-<install_command>
-```
-## Using <project_name>
+## Usando BioPortal APIs
 
-To use <project_name>, follow these steps:
+Siga estos pasos en un programa de Python para descargar datos de APIs públicos:
 
+```python
+from bioportal import BioPortalClient
+
+client = BioPortalClient() # Cliente del BioPortal
+
+# Descargar y guardar datos en formato csv
+casos_por_coleccion = client.descargar_dataset('Casos por fecha de coleccion')
+casos_por_coleccion.to_csv('Casos_por_fecha_coleccion.csv')
 ```
-<usage_example>
+
+Además, puede ver cuales APIs estan disponibles usando:
+
+```python
+>>> client.datasets_disponibles()
+```
+```
+Bases de datos disponibles:
+  1   'Pruebas unicas con informacion minima'
+  2   'Pruebas unicas con ID de paciente y fechas en tiempo local de Puerto Rico'
+  3   'Pruebas unicas con ID de paciente y fechas en tiempo internacional UTC'
+  4   'Pruebas por fecha de coleccion'
+  5   'Pruebas por fecha de reporte'
+  6   'Pruebas por fecha de coleccion y entidad'
+  7   'Total de TDF por fecha reportada de llegada'
+  8   'Casos por fecha de coleccion'
+  9   'Casos por fecha de creacion en sistema'
+ 10   'Casos por grupo de edad'
+ 11   'Casos por ciudad'
+ 12   'Casos por region'
+ 13   'Resumen de Escuelas Publicas y Privadas'
 ```
 
-Add run commands and examples you think users will find useful. Provide an options reference for bonus points!
-
-## Contributing to <project_name>
+## Contribuyendo a desarrollar este programa
 <!--- If your README is long or you have some specific process or steps you want contributors to follow, consider creating a separate CONTRIBUTING.md file--->
-To contribute to <project_name>, follow these steps:
+Para contribuir al crecimiento de BioPortal APIs, sigue estos pasos:
 
 1. Fork this repository.
 2. Create a branch: `git checkout -b <branch_name>`.
@@ -54,21 +74,13 @@ To contribute to <project_name>, follow these steps:
 
 Alternatively see the GitHub documentation on [creating a pull request](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request).
 
-## Contributors
+## Contribuyentes
 
-Thanks to the following people who have contributed to this project:
+## Contacto
 
-* [@scottydocs](https://github.com/scottydocs) 📖
-* [@cainwatson](https://github.com/cainwatson) 🐛
-* [@calchuchesta](https://github.com/calchuchesta) 🐛
+En caso de alguna pregunta, puede contactarnos a través de <jose.zavala@salud.pr.gov>.
 
-You might want to consider using something like the [All Contributors](https://github.com/all-contributors/all-contributors) specification and its [emoji key](https://allcontributors.org/docs/en/emoji-key).
-
-## Contact
-
-If you want to contact me you can reach me at <your_email@address.com>.
-
-## License
+## Licencia
 <!--- If you're not sure which open license to use see https://choosealicense.com/--->
 
-This project uses the following license: [<license_name>](<link>).
+Este proyecto esta licenciado bajo los terminos de la [Licencia MIT](LICENSE).
