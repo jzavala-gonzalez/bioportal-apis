@@ -5,7 +5,14 @@ import pandas as pd
 
 
 class BioPortalClient:
-  api_urls = {
+    """Cliente para conectarse a y descargar datos directamente del BioPortal.
+
+    Atributos:
+        api_urls (dict): API url correspondiendo a cada dataset público.
+        apidata (:obj:`pandas.DataFrame`): Datos descargados. None si no se ha descargado nada.
+
+    """
+    api_urls = {
       # 'Cantidades totales de pruebas reportadas': 'https://BioPortal.salud.gov.pr/api/administration/reports/total', # Decompression error: incomplete compressed string (?)
       'Pruebas unicas con informacion minima': 'https://BioPortal.salud.gov.pr/api/administration/reports/minimal-info-unique-tests',
       'Pruebas unicas con ID de paciente y fechas en tiempo local de Puerto Rico': 'https://BioPortal.salud.gov.pr/api/administration/reports/orders/minimal-info',
@@ -22,39 +29,83 @@ class BioPortalClient:
       'Casos por ciudad': 'https://BioPortal.salud.gov.pr/api/administration/reports/cases/dashboard-city',
       'Casos por region': 'https://BioPortal.salud.gov.pr/api/administration/reports/cases/dashboard-region',
       'Resumen de Escuelas Publicas y Privadas': 'https://BioPortal.salud.gov.pr/api/administration/reports/education/general-summary',
-  }
-  def __init__(self):
-    self.apidata = None
-    pass
+    }
 
-  def datasets_disponibles(self):
-    print('Bases de datos disponibles:')
-    for i,k in enumerate(self.api_urls):
-      print(" {}   '{}'".format(str(i+1).rjust(2), k))
+    def __init__(self):
+        """El constructor para el BioPortalClient.
+        """
+        self.apidata = None
+        pass
 
-  def descargar_dataset(self, nombre_dataset, verbose=True):
-    if nombre_dataset not in self.api_urls:
-      raise ValueError("El dataset '{}' no esta disponible. \
-      Usa client.datasets_disponibles() para encontrar cuales lo estan.".format(nombre_dataset))
-    aurl = self.api_urls[nombre_dataset]
-    if verbose: print('Descargando "{}"...'.format(nombre_dataset))
-    apidata = self.descargar_dataset_url(aurl, verbose=verbose)
-    self.apidata = apidata
-    if verbose: print("Descargado.")
-    return self.apidata
+    def datasets_disponibles(self):
+        """Imprime una lista de los nombres de los datasets disponibles para descargar.
 
-  def descargar_dataset_url(self, apiurl, verbose=True, dataframe=True):
-    r = requests.get(apiurl, headers={'Accept-Encoding': 'br'})
-    apidata_raw = (brotli.decompress(r.content))
-    if dataframe:
-      apidata = pd.json_normalize(  json.loads(apidata_raw),  sep='_')
-    else:
-      apidata = apidata_raw
-    return apidata
+        Devuelve:
+            None
+        """
+        print('Bases de datos disponibles:')
+        for i,k in enumerate(self.api_urls):
+          print(" {}   '{}'".format(str(i+1).rjust(2), k))
 
+    def descargar_dataset(self, nombre_dataset, verbose=True):
+        """Descargar un dataset de algun API público del BioPortal.
+
+        Este dataset procesado tambien es guardado en el atributo 'apidata'.
+
+        Parametros:
+            nombre_dataset (str): Nombre del dataset para descargar.
+            verbose (bool; opcional): Opcion para imprimir detalles a lo largo de la descarga.
+        
+        Devuelve:
+            self.apidata (pandas.DataFrame): Datos descargados y procesados del API indicado.
+        """
+        if nombre_dataset not in self.api_urls:
+          raise ValueError("El dataset '{}' no esta disponible. \
+          Usa client.datasets_disponibles() para encontrar cuales lo estan.".format(nombre_dataset))
+        aurl = self.api_urls[nombre_dataset]
+        if verbose: print('Descargando "{}"...'.format(nombre_dataset))
+        apidata = self.descargar_dataset_url(aurl, verbose=verbose)
+        self.apidata = apidata
+        if verbose: print("Descargado.")
+        return self.apidata
+
+    def descargar_dataset_url(self, apiurl, verbose=True, dataframe=True):
+        """Descargar un dataset usando directamente un API URL provisto.
+
+        Este método es útil para descargar datasets de APIs que aun no esten
+        implementados dentro del atributo de 'api_urls'. Tambien funciona
+        para bajar la data cruda al escoger False para el parametro de 'dataframe'.
+
+        Parametros:
+            apiurl (str): URL completo (e.g. 'https://[...]') de un API público de BioPortal.
+            verbose (bool; opcional): Opcion para imprimir detalles a lo largo de la descarga.
+            dataframe (bool; opcional): Opcion para procesar datos descargados a DataFrame.
+                                            Elija False para devolver data cruda.
+
+        Devuelve:
+            apidata (str o pandas.DataFrame): Datos descargados. Crudos (str) si 'dataframe' es False;
+                                                si no, procesados a un pandas.DataFrame.
+        """
+        r = requests.get(apiurl, headers={'Accept-Encoding': 'br'})
+        apidata_raw = (brotli.decompress(r.content))
+        if dataframe:
+          apidata = pd.json_normalize(  json.loads(apidata_raw),  sep='_')
+        else:
+          apidata = apidata_raw
+        return apidata
+
+
+## Ejemplo para descargar un dataset:
 if __name__ == '__main__':
+    # Crear cliente de BioPortal
     cliente = BioPortalClient()
+
+    # Imprimir la lista de datasets disponibles
     cliente.datasets_disponibles()
+
+    # Descargar e imprimir los datos indicados
     casos_por_coleccion = cliente.descargar_dataset('Casos por fecha de coleccion')
     print(casos_por_coleccion)
-    pass
+
+    # Guardarlos a un archivo de formato csv
+    # casos_por_coleccion.to_csv('Casos_fecha_coleccion.csv')
