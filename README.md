@@ -57,6 +57,8 @@ Bases de datos disponibles:
  13   'Resumen de Escuelas Publicas y Privadas'
 ```
 
+Nota: Si algun API esta bajo mantenimiento y/o desconectado, este paquete deberia advertir sobre cual error en particular esta ocurriendo. Levante un "Issue" en este repositorio o contactenos si encuentra algo extraño.
+
 ## Contribuyendo a desarrollar este programa
 <!--- If your README is long or you have some specific process or steps you want contributors to follow, consider creating a separate CONTRIBUTING.md file--->
 Para contribuir al crecimiento de BioPortal APIs, sigue estos pasos:
