@@ -42,22 +42,25 @@ cliente.datasets_disponibles()
 ```
 ```
 Bases de datos disponibles:
-  1   'Pruebas unicas con informacion minima'
-  2   'Pruebas unicas con ID de paciente y fechas en tiempo local de Puerto Rico'
-  3   'Pruebas unicas con ID de paciente y fechas en tiempo internacional UTC'
-  4   'Pruebas por fecha de coleccion'
-  5   'Pruebas por fecha de reporte'
-  6   'Pruebas por fecha de coleccion y entidad'
-  7   'Total de TDF por fecha reportada de llegada'
-  8   'Casos por fecha de coleccion'
-  9   'Casos por fecha de creacion en sistema'
- 10   'Casos por grupo de edad'
- 11   'Casos por ciudad'
- 12   'Casos por region'
- 13   'Resumen de Escuelas Publicas y Privadas'
+  1   'Cantidades totales de pruebas reportadas'
+  2   'Pruebas unicas con informacion minima'
+  3   'Pruebas unicas con ID de paciente y fechas en tiempo local de Puerto Rico'
+  4   'Pruebas unicas con ID de paciente y fechas en tiempo internacional UTC'
+  5   'Pruebas diarias para grafica de dashboard de Salud'
+  6   'Pruebas por fecha de coleccion'
+  7   'Pruebas por fecha de reporte'
+  8   'Pruebas por fecha de coleccion y entidad'
+  9   'Total de TDF por fecha reportada de llegada'
+ 10   'Total de TDF por municipio'
+ 11   'Casos por fecha de coleccion'
+ 12   'Casos por fecha de creacion en sistema'
+ 13   'Casos por grupo de edad'
+ 14   'Casos por ciudad'
+ 15   'Casos por region'
+ 16   'Resumen de Escuelas Publicas y Privadas'
 ```
 
-Nota: Si algun API esta bajo mantenimiento y/o desconectado, este paquete deberia advertir sobre cual error en particular esta ocurriendo. Levante un "Issue" en este repositorio o contactenos si encuentra algo extraño.
+**Nota:** Si algun API esta bajo mantenimiento y/o desconectado, este paquete debería advertir sobre cual error en particular esta ocurriendo. Levante un "Issue" en este repositorio o contactenos incluyendo algun screenshot y descripción de como llego al error si encuentra algo extraño.
 
 ## Contribuyendo a desarrollar este programa
 <!--- If your README is long or you have some specific process or steps you want contributors to follow, consider creating a separate CONTRIBUTING.md file--->
