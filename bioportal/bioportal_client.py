@@ -13,7 +13,7 @@ class BioPortalClient:
 
     """
     api_urls = {
-      'Cantidades totales de pruebas reportadas': 'https://BioPortal.salud.gov.pr/api/administration/reports/total', # Decompression error?
+      'Cantidades totales de pruebas reportadas': 'https://BioPortal.salud.gov.pr/api/administration/reports/total',
       'Pruebas unicas con informacion minima': 'https://BioPortal.salud.gov.pr/api/administration/reports/minimal-info-unique-tests',
       'Pruebas unicas con ID de paciente y fechas en tiempo local de Puerto Rico': 'https://BioPortal.salud.gov.pr/api/administration/reports/orders/minimal-info',
       'Pruebas unicas con ID de paciente y fechas en tiempo internacional UTC': 'https://BioPortal.salud.gov.pr/api/administration/reports/orders/basic',
@@ -64,9 +64,12 @@ class BioPortalClient:
           Usa client.datasets_disponibles() para encontrar cuales lo estan.".format(nombre_dataset))
         aurl = self.api_urls[nombre_dataset]
         if verbose: print('Descargando "{}"...'.format(nombre_dataset))
-        apidata = self.descargar_dataset_url(aurl, verbose=verbose)
-        self.apidata = apidata
-        if verbose: print("Descargado.")
+        apidata, exitoso = self.descargar_dataset_url(aurl, verbose=verbose)
+        if exitoso:
+          if verbose: print("Descargado.")
+          self.apidata = apidata
+        else:
+          print("Descarga falló.")
         return self.apidata
 
     def descargar_dataset_url(self, apiurl, verbose=True, dataframe=True):
@@ -85,10 +88,29 @@ class BioPortalClient:
         Devuelve:
             apidata (str o pandas.DataFrame): Datos descargados. Crudos (str) si 'dataframe' es False;
                                                 si no, procesados a un pandas.DataFrame.
+            exitoso (bool): Bandera clarificando si el api pudo descargarse exitosamente.
         """
         self.apidata = None
-        r = requests.get(apiurl, headers={'Accept-Encoding': 'br'})
+
+        try:
+          r = requests.get(apiurl, headers={'Accept-Encoding': 'br'}, timeout=(15,None))
+        except requests.exceptions.Timeout:
+          # Se quedo pegao
+          print("Servidor no responde.")
+          return (None, False)
+
+        # Status code
+        if r.status_code != 200:
+          print("Respuesta inesperada del servidor (#{})".format(r.status_code))
+          return (None, False)
+
         apidata_raw = r.content
+
+        if r.encoding.startswith('ISO'):
+          if r.content.decode().startswith('<!DOCTYPE html>'):
+            print("Servidor no esperaba que bajaras este API (devolvio un documento HTML)")
+            return (None, False)
+
         if r.encoding != 'utf-8':
           apidata_raw = (brotli.decompress(apidata_raw))
 
@@ -96,7 +118,7 @@ class BioPortalClient:
           apidata = pd.json_normalize(  json.loads(apidata_raw),  sep='_')
         else:
           apidata = apidata_raw
-        return apidata
+        return (apidata, True)
 
 
 ## Ejemplo para descargar un dataset:
@@ -113,3 +135,9 @@ if __name__ == '__main__':
 
     # Guardarlos a un archivo de formato csv
     # casos_por_coleccion.to_csv('Casos_fecha_coleccion.csv')
+
+    # Probando: Intentar descargar todos los APIs
+    # for i,k in enumerate(cliente.api_urls):
+    #   print(i+1, k)
+    #   cliente.descargar_dataset(k)
+    #   print()
