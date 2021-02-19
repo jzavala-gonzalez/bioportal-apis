@@ -13,16 +13,16 @@ class BioPortalClient:
 
     """
     api_urls = {
-      # 'Cantidades totales de pruebas reportadas': 'https://BioPortal.salud.gov.pr/api/administration/reports/total', # Decompression error: incomplete compressed string (?)
+      'Cantidades totales de pruebas reportadas': 'https://BioPortal.salud.gov.pr/api/administration/reports/total', # Decompression error?
       'Pruebas unicas con informacion minima': 'https://BioPortal.salud.gov.pr/api/administration/reports/minimal-info-unique-tests',
       'Pruebas unicas con ID de paciente y fechas en tiempo local de Puerto Rico': 'https://BioPortal.salud.gov.pr/api/administration/reports/orders/minimal-info',
       'Pruebas unicas con ID de paciente y fechas en tiempo internacional UTC': 'https://BioPortal.salud.gov.pr/api/administration/reports/orders/basic',
-      # 'Pruebas diarias para grafica de dashboard de Salud': 'https://BioPortal.salud.gov.pr/api/administration/orders/dashboard-daily-testing', # HTML enable JS
+      'Pruebas diarias para grafica de dashboard de Salud': 'https://BioPortal.salud.gov.pr/api/administration/orders/dashboard-daily-testing', # HTML enable JS
       'Pruebas por fecha de coleccion': 'https://BioPortal.salud.gov.pr/api/administration/reports/tests-by-collected-date',
       'Pruebas por fecha de reporte': 'https://BioPortal.salud.gov.pr/api/administration/reports/tests-by-reported-date',
       'Pruebas por fecha de coleccion y entidad': 'https://BioPortal.salud.gov.pr/api/administration/reports/tests-by-collected-date-and-entity',
       'Total de TDF por fecha reportada de llegada': 'https://BioPortal.salud.gov.pr/api/administration/reports/travels/total-forms-by-reported-arrival-date',
-      # 'Total de TDF por municipio': 'https://BioPortal.salud.gov.pr/api/administration/travels/total-forms-by-municipalities',   # HTML enable JS
+      'Total de TDF por municipio': 'https://BioPortal.salud.gov.pr/api/administration/travels/total-forms-by-municipalities',   # HTML enable JS
       'Casos por fecha de coleccion': 'https://BioPortal.salud.gov.pr/api/administration/reports/cases/grouped-by-collected-date',
       'Casos por fecha de creacion en sistema': 'https://BioPortal.salud.gov.pr/api/administration/reports/cases/dashboard-daily',
       'Casos por grupo de edad': 'https://BioPortal.salud.gov.pr/api/administration/reports/cases/dashboard-age-group',
@@ -86,8 +86,12 @@ class BioPortalClient:
             apidata (str o pandas.DataFrame): Datos descargados. Crudos (str) si 'dataframe' es False;
                                                 si no, procesados a un pandas.DataFrame.
         """
+        self.apidata = None
         r = requests.get(apiurl, headers={'Accept-Encoding': 'br'})
-        apidata_raw = (brotli.decompress(r.content))
+        apidata_raw = r.content
+        if r.encoding != 'utf-8':
+          apidata_raw = (brotli.decompress(apidata_raw))
+
         if dataframe:
           apidata = pd.json_normalize(  json.loads(apidata_raw),  sep='_')
         else:
