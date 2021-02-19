@@ -1,6 +1,8 @@
 # BioPortal APIs
 
 <!--- These are examples. See https://shields.io for others or to customize this set of shields. You might want to include dependencies, project status and licence info here --->
+[![PyPI version shields.io](https://img.shields.io/pypi/v/ansicolortags.svg)](https://pypi.org/project/bioportal/)
+[![PyPI license](https://img.shields.io/pypi/l/ansicolortags.svg)](https://pypi.org/project/bioportal/)
 [![Twitter](https://img.shields.io/twitter/follow/SMICRCPR.svg?style=social&label=@SMICRCPR)](https://twitter.com/SMICRCPR)
 
 BioPortal APIs es un paquete de Python que permite accesar las bases de datos públicas del BioPortal del Departamento de Salud de Puerto Rico.
