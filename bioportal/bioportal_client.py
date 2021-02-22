@@ -111,8 +111,10 @@ class BioPortalClient:
             print("Servidor no esperaba que bajaras este API (devolvio un documento HTML)")
             return (None, False)
 
-        if r.encoding != 'utf-8':
+        try:
           apidata_raw = (brotli.decompress(apidata_raw))
+        except:
+          pass
 
         if dataframe:
           apidata = pd.json_normalize(  json.loads(apidata_raw),  sep='_')
